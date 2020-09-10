@@ -4,12 +4,8 @@ def getDockerTag() {
 }
 pipeline{
 
-      agent {
-                docker {
-                image 'maven'
-                args '-v $HOME/.m2:/root/.m2'
-                }
-             }
+      agent any
+	
       environment {
           Docker_tag = getDockerTag()
       }
@@ -17,6 +13,12 @@ pipeline{
         stages{
 
               stage('Quality Gate Status Check'){
+		      {
+                docker {
+                image 'maven'
+                args '-v $HOME/.m2:/root/.m2'
+                }
+             }
                   steps{
                       script{
 			      withSonarQubeEnv('sonarserver') { 
